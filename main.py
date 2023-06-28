@@ -1,6 +1,7 @@
 import telebot
 from destiny_number import get_description
 from date_birthday import get_decode_birthday
+from number_name import calculate_name
 import re
 
 token = '6232507877:AAF5qdMgv0HAQHWMgggi8Nk1PDK6DOw4zho'
@@ -104,8 +105,19 @@ def get_birthday(message):
     else:
         bot.send_message(message.chat.id, 'Неправильный ввод данных', parse_mode="HTML")
 
+@bot.message_handler(commands=['value_name'])
+def value_name(message):
+    bot.send_message(message.chat.id, 'Введите ваше ФИО на русском языке через пробел. Например, Лушкин Валерьян Еванович')
+    user_states[message.chat.id] = 'value_name'
 
-
+@bot.message_handler(func=lambda message: user_states.get(message.chat.id) == 'value_name')
+def get_value_name(message):
+    text = calculate_name(message.text)
+    if text != -1:
+        bot.send_message(message.chat.id, text, parse_mode="HTML")
+        user_states[message.chat.id] = None
+    else:
+        bot.send_message(message.chat.id, 'Неправильный ввод данных', parse_mode="HTML")
 
 if __name__ == '__main__':
     while True:
