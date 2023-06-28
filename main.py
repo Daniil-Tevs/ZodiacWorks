@@ -60,6 +60,32 @@ def get_decode_birthday(number):
                 'Для людей, родившихся 31-го числа, характерна полная самоотдача в работе. Чтобы чувствовать свою значимость в жизни, они в ответственные моменты многое берут на себя. Переоценка своих сил и возможностей вызывает у них разочарование и утомление. Такой образ жизни не оставляет времени и сил на личную жизнь. Для отдыха и восстановления сил путешествуйте, не будьте одиноки.']
     return birtdays[int(number)-1]
 
+def get_zodiac(month, day):
+    if (int(day) >= 21 and int(month) == 3) or (int(day) <= 20 and int(month) == 4):
+        return 'Ваш знак зодиака: <strong>Овен</strong>\n\n Стихия: <strong>огонь</strong>🔥'
+    if (int(day) >= 21 and int(month) == 4) or (int(day) <= 20 and int(month) == 5):
+        return 'Ваш знак зодиака: <strong>Телец</strong>\n\n Стихия: <strong>земля</strong>🌏'
+    if (int(day) >= 21 and int(month) == 5) or (int(day) <= 21 and int(month) == 6):
+        return 'Ваш знак зодиака: <strong>Близнецы</strong>\n\n Стихия: <strong>воздух</strong>💨'
+    if (int(day) >= 22 and int(month) == 6) or (int(day) <= 22 and int(month) == 7):
+        return 'Ваш знак зодиака: <strong>Рак</strong>\n\n Стихия: <strong>вода</strong>🌊'
+    if (int(day) >= 23 and int(month) == 7) or (int(day) <= 22 and int(month) == 8):
+        return 'Ваш знак зодиака: <strong>Лев</strong>\n\n Стихия: <strong>огонь</strong>🔥'
+    if (int(day) >= 23 and int(month) == 8) or (int(day) <= 23 and int(month) == 9):
+        return 'Ваш знак зодиака: <strong>Дева</strong>\n\n Стихия: <strong>земля</strong>🌏'
+    if (int(day) >= 24 and int(month) == 9) or (int(day) <= 23 and int(month) == 10):
+        return 'Ваш знак зодиака: <strong>Весы</strong>\n\n Стихия: <strong>воздух</strong>💨'
+    if (int(day) >= 24 and int(month) == 10) or (int(day) <= 22 and int(month) == 11):
+        return 'Ваш знак зодиака: <strong>Скорпион</strong>\n\n Стихия: <strong>вода</strong>🌊'
+    if (int(day) >= 23 and int(month) == 11) or (int(day) <= 21 and int(month) == 12):
+        return 'Ваш знак зодиака: <strong>Стрелец</strong>\n\n Стихия: <strong>огонь</strong>🔥'
+    if (int(day) >= 22 and int(month) == 12) or (int(day) <= 20 and int(month) == 1):
+        return 'Ваш знак зодиака: <strong>Козерог</strong>\n\n Стихия: <strong>земля</strong>🌏'
+    if (int(day) >= 21 and int(month) == 1) or (int(day) <= 18 and int(month) == 2):
+        return 'Ваш знак зодиака: <strong>Водолей</strong>\n\n Стихия: <strong>воздух</strong>💨'
+    if (int(day) >= 19 and int(month) == 2) or (int(day) <= 20 and int(month) == 3):
+        return 'Ваш знак зодиака: <strong>Рыбы</strong>\n\n Стихия: <strong>вода</strong>🌊'
+
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id, "Привет ✌️ ")
@@ -76,7 +102,7 @@ def destiny_number(message):
 def destiny_number(message):
     bot.send_message(message.chat.id, 'Введите ваш день рождения')
 
-@bot.message_handler(commands=['zodiak'])
+@bot.message_handler(commands=['zodiac'])
 def zodiak(message):
     bot.send_message(message.chat.id, 'Введите вашу дату рождения в формате гггг.мм.дд. Например, 2002.08.20')
 
@@ -109,9 +135,10 @@ def message_reply(message):
     if match:
         data = match.group()
         data = data.split('.')
-        response = requests.request('get','https://ru.astro-seek.com/vychislit-solnechnyy-znak/?send_calculation=20&narozeni_den='+str(data[2])+'&narozeni_mesic='+str(data[1])+'&narozeni_rok='+str(data[0])+'&narozeni_hodina=12&narozeni_minuta=00&narozeni_city=&narozeni_mesto_hidden=%D0%92%D1%80%D1%83%D1%87%D0%BD%D1%83%D1%8E%3A+%C2%B0%27%D1%81.+%D1%88.%2C+%C2%B0%27%D0%B2.+%D0%B4.&narozeni_stat_hidden=&narozeni_podstat_kratky_hidden=&narozeni_podstat_hidden=&narozeni_input_hidden=&narozeni_podstat2_kratky_hidden=&narozeni_podstat3_kratky_hidden=&narozeni_sirka_stupne=0&narozeni_sirka_minuty=0&narozeni_sirka_smer=0&narozeni_delka_stupne=0&narozeni_delka_minuty=0&narozeni_delka_smer=0&narozeni_timezone_form=auto&narozeni_timezone_dst_form=auto')
-
-        bot.send_message(message.chat.id, response.text)
+        month = data[1]
+        day = data[2]
+        zodiac = get_zodiac(month, day)
+        bot.send_message(message.chat.id, zodiac,parse_mode="HTML" )
 
 
 if __name__ == '__main__':
